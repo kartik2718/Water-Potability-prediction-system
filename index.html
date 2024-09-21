@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Prediction</title>
+</head>
+<body>
+    <h1>Water Quality Prediction</h1>
+    <form id="waterQualityForm">
+        <label for="ph">pH:</label>
+        <input type="number" step="any" id="ph" name="ph" required><br><br>
+        <label for="Hardness">Hardness:</label>
+        <input type="number" step="any" id="Hardness" name="Hardness" required><br><br>
+        <label for="Solids">Solids:</label>
+        <input type="number" step="any" id="Solids" name="Solids" required><br><br>
+        <label for="Chloramines">Chloramines:</label>
+        <input type="number" step="any" id="Chloramines" name="Chloramines" required><br><br>
+        <label for="Sulfate">Sulfate:</label>
+        <input type="number" step="any" id="Sulfate" name="Sulfate" required><br><br>
+        <label for="Conductivity">Conductivity:</label>
+        <input type="number" step="any" id="Conductivity" name="Conductivity" required><br><br>
+        <label for="Organic_Carbon">Organic Carbon:</label>
+        <input type="number" step="any" id="Organic_Carbon" name="Organic_Carbon" required><br><br>
+        <label for="Trihalomethanes">Trihalomethanes:</label>
+        <input type="number" step="any" id="Trihalomethanes" name="Trihalomethanes" required><br><br>
+        <label for="Turbidity">Turbidity:</label>
+        <input type="number" step="any" id="Turbidity" name="Turbidity" required><br><br>
+        
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <div id="prediction"></div>
+
+    <script>
+        function predict() {
+            // Get input values
+            var ph = parseFloat(document.getElementById("ph").value);
+            var Hardness = parseFloat(document.getElementById("Hardness").value);
+            var Solids = parseFloat(document.getElementById("Solids").value);
+            var Chloramines = parseFloat(document.getElementById("Chloramines").value);
+            var Sulfate = parseFloat(document.getElementById("Sulfate").value);
+            var Conductivity = parseFloat(document.getElementById("Conductivity").value);
+            var Organic_Carbon = parseFloat(document.getElementById("Organic_Carbon").value);
+            var Trihalomethanes = parseFloat(document.getElementById("Trihalomethanes").value);
+            var Turbidity = parseFloat(document.getElementById("Turbidity").value);
+
+            // Make POST request to FastAPI endpoint
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ph: ph, 
+                    Hardness: Hardness, 
+                    Solids: Solids, 
+                    Chloramines: Chloramines, 
+                    Sulfate: Sulfate, 
+                    Conductivity: Conductivity, 
+                    Organic_Carbon: Organic_Carbon, 
+                    Trihalomethanes: Trihalomethanes, 
+                    Turbidity: Turbidity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display prediction result
+                document.getElementById('prediction').innerText = 'Prediction: ' + data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
+
